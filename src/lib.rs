@@ -1,9 +1,13 @@
 mod error;
+#[cfg(feature = "json")]
 mod object;
 mod types;
 mod validators;
 
 pub use self::{error::*, types::*, validators::*};
+
+#[cfg(feature = "json")]
+pub use object::*;
 
 #[cfg(test)]
 mod test {

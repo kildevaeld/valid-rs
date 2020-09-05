@@ -11,7 +11,7 @@ pub fn required<V>() -> Required<Option<V>> {
 pub struct All;
 
 impl<V> Validation<V> for All {
-    fn validate(&self, value: &V) -> Result<(), Error> {
+    fn validate(&self, _value: &V) -> Result<(), Error> {
         Ok(())
     }
 }
@@ -201,3 +201,28 @@ minmax_impl!(f32);
 minmax_impl!(f64);
 minmax_impl!(usize);
 minmax_impl!(isize);
+
+#[cfg(regexp)]
+pub struct Regexp<'a>(pub &'a regexp::regex::Regex);
+
+#[cfg(regexp)]
+impl<'a> Validation<String> for Regexp<'a> {
+    fn validate(&self, value: &String) -> Result<(), Error> {
+        if self.0.is_match(value) {
+            Ok(())
+        } else {
+            Err(Error::Required)
+        }
+    }
+}
+
+#[cfg(regexp)]
+impl<'a, 'b> Validation<&'b str> for Regexp<'a> {
+    fn validate(&self, value: &&'a str) -> Result<(), Error> {
+        if self.0.is_match(value) {
+            Ok(())
+        } else {
+            Err(Error::Required)
+        }
+    }
+}

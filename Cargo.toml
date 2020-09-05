@@ -7,5 +7,10 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde_json = "1"
-serde = "1"
+serde_json = { version = "1", optional = true }
+serde = { version = "1", optional = true }
+regexp = { version = "0.3", optional = true }
+
+[features]
+default = [ "json", "regexp" ]
+json = [ "serde_json", "serde" ]

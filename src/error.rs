@@ -8,6 +8,7 @@ pub enum Error {
     MaxLen(usize),
     Other(Box<dyn StdError>),
     Multi(Vec<Error>),
+    Custom(String),
 }
 
 impl fmt::Display for Error {

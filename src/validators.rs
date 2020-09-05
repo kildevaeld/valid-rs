@@ -226,3 +226,23 @@ impl<'a, 'b> Validation<&'b str> for Regexp<'a> {
         }
     }
 }
+
+pub struct Parse<P>(std::marker::PhantomData<P>);
+
+impl<P> Parse<P> {
+    pub fn new() -> Parse<P> {
+        Parse(std::marker::PhantomData)
+    }
+}
+
+impl<P: std::str::FromStr> Validation<String> for Parse<P>
+where
+    P::Err: std::error::Error,
+{
+    fn validate(&self, value: &String) -> Result<(), Error> {
+        match P::from_str(value) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(Error::Custom(e.to_string())),
+        }
+    }
+}

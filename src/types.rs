@@ -285,6 +285,19 @@ where
             _s: PhantomData,
         }
     }
+
+    pub fn and_boxed<O: Validation<S>>(self, other: O) -> Valid<Box<dyn Validation<S>>, S>
+    where
+        S: 'static,
+        O: 'static,
+        V: 'static,
+    {
+        Valid {
+            required: self.required,
+            validator: Box::new(self.validator.and(other)),
+            _s: PhantomData,
+        }
+    }
 }
 
 impl<V, S> Validation<Option<S>> for Valid<V, S>

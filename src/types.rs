@@ -6,6 +6,12 @@ pub trait Validation<V> {
     fn validate(&self, value: &V) -> Result<(), Error>;
 }
 
+impl<V> Validation<V> for Box<dyn Validation<V>> {
+    fn validate(&self, value: &V) -> Result<(), Error> {
+        self.as_ref().validate(value)
+    }
+}
+
 pub trait ValidationExt<V>: Validation<V> + Sized {
     fn boxed(self) -> Box<dyn Validation<V>>
     where
